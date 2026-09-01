@@ -1,0 +1,36 @@
+{% extends 'events/base.html' %}
+{% block title %}Pay for your tickets &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white rounded-xl border border-slate-200 p-6">
+  <h1 class="text-2xl font-bold">Mobile money payment</h1>
+  <div class="mt-4 rounded-lg bg-slate-50 border border-slate-200 p-4 text-sm space-y-1">
+    <p><span class="text-slate-500">Event:</span> {{ booking.event.title }}</p>
+    <p><span class="text-slate-500">Category:</span> {{ booking.category.name }}</p>
+    <p><span class="text-slate-500">Tickets:</span> {{ booking.quantity }}</p>
+    <p class="font-semibold text-lg">Total: {{ booking.total_amount|floatformat:0 }} XAF</p>
+  </div>
+
+  <form method="post" class="mt-6 space-y-4">
+    {% csrf_token %}
+    <fieldset>
+      <legend class="block text-sm font-medium mb-2">Choose your operator</legend>
+      <div class="space-y-2">
+        {% for choice in form.provider %}
+          <label class="flex items-center gap-3 border border-slate-200 rounded-lg px-4 py-3 cursor-pointer">
+            {{ choice.tag }} <span>{{ choice.choice_label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+      {% if form.provider.errors %}<p class="text-sm text-red-600 mt-1">{{ form.provider.errors|striptags }}</p>{% endif %}
+    </fieldset>
+    <div>
+      <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium mb-1">Mobile money number</label>
+      {{ form.phone_number }}
+      {% if form.phone_number.errors %}<p class="text-sm text-red-600 mt-1">{{ form.phone_number.errors|striptags }}</p>{% endif %}
+    </div>
+    <button class="w-full rounded-lg bg-emerald-600 text-white px-4 py-2.5 hover:bg-emerald-700">Pay {{ booking.total_amount|floatformat:0 }} XAF</button>
+    <p class="text-xs text-slate-500">You will receive a payment prompt on your phone. Tickets are released as soon as the collection is confirmed.</p>
+  </form>
+</div>
+{% endblock %}

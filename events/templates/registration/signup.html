@@ -1,0 +1,24 @@
+{% extends 'events/base.html' %}
+{% block title %}Create an organizer account &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white border border-slate-200 rounded-xl p-6">
+  <h1 class="text-2xl font-bold">Create an organizer account</h1>
+  <form method="post" class="mt-6 space-y-4">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3">{{ form.non_field_errors|striptags }}</div>
+    {% endif %}
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-1">{{ field.label }}</label>
+        <input type="{% if 'password' in field.name %}password{% else %}text{% endif %}" name="{{ field.name }}" id="{{ field.id_for_label }}"
+               class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-emerald-500 focus:outline-none">
+        {% if field.help_text %}<p class="text-xs text-slate-400 mt-1">{{ field.help_text|safe }}</p>{% endif %}
+        {% if field.errors %}<p class="text-sm text-red-600 mt-1">{{ field.errors|striptags }}</p>{% endif %}
+      </div>
+    {% endfor %}
+    <button class="w-full rounded-lg bg-emerald-600 text-white px-4 py-2.5 hover:bg-emerald-700">Sign up</button>
+  </form>
+</div>
+{% endblock %}

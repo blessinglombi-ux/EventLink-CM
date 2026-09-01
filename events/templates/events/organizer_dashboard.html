@@ -1,0 +1,49 @@
+{% extends 'events/base.html' %}
+{% block title %}Organizer dashboard &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-bold">Statistics board</h1>
+  <a href="{% url 'event_create' %}" class="rounded-lg bg-emerald-600 text-white px-4 py-2 hover:bg-emerald-700">New event</a>
+</div>
+
+<section class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Events</p><p class="text-2xl font-bold">{{ totals.events }}</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Tickets issued</p><p class="text-2xl font-bold">{{ totals.tickets }}</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Checked in</p><p class="text-2xl font-bold">{{ totals.attended }}</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Attendance rate</p><p class="text-2xl font-bold">{{ totals.attendance_rate }}%</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Revenue</p><p class="text-2xl font-bold">{{ totals.revenue|floatformat:0 }} XAF</p></div>
+</section>
+
+<section class="mt-8 bg-white border border-slate-200 rounded-xl overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 text-left text-slate-500">
+      <tr>
+        <th class="px-4 py-3">Event</th>
+        <th class="px-4 py-3">Date</th>
+        <th class="px-4 py-3">Issued</th>
+        <th class="px-4 py-3">Attended</th>
+        <th class="px-4 py-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+        <tr class="border-t border-slate-100">
+          <td class="px-4 py-3 font-medium"><a href="{{ event.get_absolute_url }}" class="hover:text-emerald-600">{{ event.title }}</a></td>
+          <td class="px-4 py-3 text-slate-500">{{ event.starts_at|date:"d M Y, H:i" }}</td>
+          <td class="px-4 py-3">{{ event.issued }}</td>
+          <td class="px-4 py-3">{{ event.attended }}</td>
+          <td class="px-4 py-3 space-x-3">
+            <a href="{% url 'event_statistics' event.slug %}" class="text-emerald-600 hover:underline">Stats</a>
+            <a href="{% url 'scanner' event.slug %}" class="text-emerald-600 hover:underline">Scan</a>
+            <a href="{% url 'event_attendees' event.slug %}" class="text-emerald-600 hover:underline">Attendees</a>
+            <a href="{% url 'event_update' event.slug %}" class="text-slate-500 hover:underline">Edit</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">You have not created any event yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

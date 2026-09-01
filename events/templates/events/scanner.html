@@ -1,0 +1,83 @@
+{% extends 'events/base.html' %}
+{% block title %}Scan tickets &middot; {{ event.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold">Scan tickets</h1>
+  <p class="text-slate-500 text-sm">{{ event.title }} &mdash; each QR code can only be accepted once.</p>
+
+  <div class="mt-4 grid grid-cols-2 gap-4">
+    <div class="bg-white border border-slate-200 rounded-xl p-4"><p class="text-xs text-slate-500">Checked in</p><p id="stat-checked-in" class="text-2xl font-bold">{{ event.tickets_checked_in }}</p></div>
+    <div class="bg-white border border-slate-200 rounded-xl p-4"><p class="text-xs text-slate-500">Tickets issued</p><p id="stat-issued" class="text-2xl font-bold">{{ event.tickets_issued }}</p></div>
+  </div>
+
+  <div class="mt-6 bg-white border border-slate-200 rounded-xl p-4">
+    <div id="reader" class="w-full"></div>
+    <p class="text-xs text-slate-500 mt-2">Allow camera access to scan attendee QR codes.</p>
+  </div>
+
+  <div id="scan-feedback" class="mt-4 hidden rounded-lg px-4 py-3 text-sm"></div>
+
+  <form method="post" class="mt-6 bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+    {% csrf_token %}
+    <label for="{{ form.code.id_for_label }}" class="block text-sm font-medium">Manual check-in</label>
+    {{ form.code }}
+    {% if form.code.errors %}<p class="text-sm text-red-600">{{ form.code.errors|striptags }}</p>{% endif %}
+    <button class="rounded-lg bg-emerald-600 text-white px-4 py-2 hover:bg-emerald-700">Check in</button>
+  </form>
+
+  {% if result %}
+    <div class="mt-4 rounded-lg px-4 py-3 text-sm {% if result.status == 'valid' %}bg-emerald-50 border border-emerald-200 text-emerald-700{% else %}bg-red-50 border border-red-200 text-red-700{% endif %}">
+      {{ result.message }}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+(function () {
+  const feedback = document.getElementById('scan-feedback');
+  const endpoint = "{% url 'scan_api' event.slug %}";
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  let busy = false;
+
+  function show(status, message) {
+    feedback.classList.remove('hidden');
+    feedback.className = 'mt-4 rounded-lg px-4 py-3 text-sm border ' + (
+      status === 'valid'
+        ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+        : 'bg-red-50 border-red-200 text-red-700'
+    );
+    feedback.textContent = message;
+  }
+
+  function onScan(decodedText) {
+    if (busy) { return; }
+    busy = true;
+    const body = new URLSearchParams({ code: decodedText });
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        show(data.status, data.message);
+        document.getElementById('stat-checked-in').textContent = data.checked_in;
+        document.getElementById('stat-issued').textContent = data.issued;
+      })
+      .catch(() => show('invalid', 'Network error, please try again.'))
+      .finally(() => { setTimeout(() => { busy = false; }, 2000); });
+  }
+
+  if (window.Html5Qrcode) {
+    const scanner = new Html5Qrcode('reader');
+    scanner
+      .start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, onScan)
+      .catch(() => show('invalid', 'Camera unavailable. Use the manual check-in form below.'));
+  }
+})();
+</script>
+{% endblock %}

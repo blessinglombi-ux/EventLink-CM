@@ -1,0 +1,47 @@
+{% extends 'events/base.html' %}
+{% block title %}{{ event.title }} &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<article class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+  {% if event.cover_image_url %}
+    <img src="{{ event.cover_image_url }}" alt="" class="h-64 w-full object-cover">
+  {% endif %}
+  <div class="p-6">
+    <h1 class="text-3xl font-bold">{{ event.title }}</h1>
+    <p class="text-slate-500 mt-1">{{ event.starts_at|date:"l d F Y, H:i" }}{% if event.ends_at %} &ndash; {{ event.ends_at|date:"H:i" }}{% endif %}</p>
+    <p class="text-slate-500">{{ event.venue }}, {{ event.city }}</p>
+    <p class="text-sm text-slate-400 mt-1">Organized by {{ event.organizer.get_username }}</p>
+
+    <div class="mt-6 whitespace-pre-line text-slate-700">{{ event.description }}</div>
+
+    <h2 class="mt-8 text-xl font-semibold">Ticket categories</h2>
+    <ul class="mt-3 space-y-2">
+      {% for category in event.categories.all %}
+        <li class="border border-slate-200 rounded-lg px-4 py-3 flex items-center justify-between">
+          <div>
+            <p class="font-medium">{{ category.name }}</p>
+            {% if category.description %}<p class="text-sm text-slate-500">{{ category.description }}</p>{% endif %}
+            <p class="text-xs text-slate-400">{{ category.tickets_remaining }} left</p>
+          </div>
+          <span class="font-semibold">
+            {% if category.is_free %}Free{% else %}{{ category.price|floatformat:0 }} XAF{% endif %}
+          </span>
+        </li>
+      {% empty %}
+        <li class="text-slate-500">No ticket categories yet.</li>
+      {% endfor %}
+    </ul>
+
+    <div class="mt-8">
+      {% if event.is_past %}
+        <p class="text-sm text-slate-500">This event has already taken place.</p>
+      {% elif event.tickets_remaining == 0 %}
+        <p class="text-sm font-semibold text-red-600">Sold out</p>
+      {% else %}
+        <a href="{% url 'booking_create' event.slug %}"
+           class="inline-block rounded-lg bg-emerald-600 text-white px-5 py-2.5 hover:bg-emerald-700">Book a ticket</a>
+      {% endif %}
+    </div>
+  </div>
+</article>
+{% endblock %}

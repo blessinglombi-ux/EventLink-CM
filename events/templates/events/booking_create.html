@@ -1,0 +1,25 @@
+{% extends 'events/base.html' %}
+{% block title %}Book {{ event.title }} &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white rounded-xl border border-slate-200 p-6">
+  <h1 class="text-2xl font-bold">Book your ticket</h1>
+  <p class="text-slate-500 text-sm mt-1">{{ event.title }} &mdash; {{ event.starts_at|date:"d M Y, H:i" }}</p>
+
+  <form method="post" class="mt-6 space-y-4">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<p class="text-sm text-red-600 mt-1">{{ field.errors|striptags }}</p>{% endif %}
+      </div>
+    {% endfor %}
+    <p class="text-xs text-slate-500">Paid tickets are settled with MTN Mobile Money or Orange Money on the next screen. Free tickets are issued instantly.</p>
+    <button class="w-full rounded-lg bg-emerald-600 text-white px-4 py-2.5 hover:bg-emerald-700">Continue</button>
+  </form>
+</div>
+{% endblock %}
