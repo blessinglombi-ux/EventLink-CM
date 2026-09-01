@@ -50,7 +50,7 @@ class Event(models.Model):
     @property
     def is_free(self):
         """True when every ticket category of the event costs nothing."""
-        prices = list(self.categories.values_list('price', flat=True))
+        prices = [category.price for category in self.categories.all()]
         return bool(prices) and all(price == Decimal('0') for price in prices)
 
     @property
@@ -60,7 +60,7 @@ class Event(models.Model):
 
     @property
     def lowest_price(self):
-        prices = list(self.categories.values_list('price', flat=True))
+        prices = [category.price for category in self.categories.all()]
         return min(prices) if prices else None
 
     @property
