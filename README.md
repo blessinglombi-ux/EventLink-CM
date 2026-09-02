@@ -1,5 +1,7 @@
 🎟️ EventLink CM
+
 Connecting Events with Participants
+
 EventLink CM is a web-based event management and digital ticketing platform designed to connect event organizers with event participants through one centralized system.
 
 The platform allows organizers to create and manage events, configure free or paid tickets, monitor registrations, verify participants using QR codes, record attendance and analyze event performance.
@@ -7,7 +9,9 @@ The platform allows organizers to create and manage events, configure free or pa
 Participants can discover events, register or purchase tickets, access their digital QR tickets and keep track of their attendance history.
 
 ⸻
+
 📌 Table of Contents
+
 * Project Overview
 * Problem Statement
 * Objectives
@@ -34,11 +38,15 @@ Participants can discover events, register or purchase tickets, access their dig
 * License
 
 ⸻
+
 📖 Project Overview
+
 EventLink CM provides a digital environment where event organizers and participants can interact before, during and after an event.
 
 For Organizers
+
 Organizers can:
+
 * Create an account
 * Create events
 * Upload event posters
@@ -57,7 +65,9 @@ Organizers can:
 * Analyze event performance
 
 For Participants
+
 Participants can:
+
 * Create an account
 * Login securely
 * Discover events
@@ -73,7 +83,9 @@ Participants can:
 * View previous event participation
 
 ⸻
+
 ❗ Problem Statement
+
 Managing events manually can create several challenges for organizers and participants.
 
 Traditional event management can involve:
@@ -90,7 +102,9 @@ Traditional event management can involve:
 EventLink CM addresses these problems by providing a centralized digital platform for event management, ticketing, payments, QR verification and reporting.
 
 ⸻
+
 🎯 Objectives
+
 The main objective of EventLink CM is to create a reliable platform that links event organizers with participants.
 
 Specific objectives include:
@@ -114,7 +128,9 @@ Specific objectives include:
 🚀 Main Features
 
 1. User Authentication
+
 The application supports:
+
 * Participant registration
 * Organizer registration
 * Login
@@ -124,8 +140,11 @@ The application supports:
 * User profiles
 
 ⸻
+
 2. Event Management
+
 Organizers can create events containing:
+
 * Event name
 * Description
 * Category
@@ -140,7 +159,9 @@ Organizers can create events containing:
 ⸻
 
 3. Event Discovery
+
 Participants can:
+
 * Browse events
 * Search events
 * View event details
@@ -149,10 +170,13 @@ Participants can:
 * Filter events
 
 ⸻
+
 4. Ticket Management
+
 Organizers can create multiple ticket categories.
 
 Example:
+
 Regular Ticket
 Price: 5,000 FCFA
 Quantity: 100
@@ -164,6 +188,7 @@ Price: FREE
 Quantity: 100
 
 The system keeps track of:
+
 * Ticket quantity
 * Tickets sold
 * Remaining tickets
@@ -171,7 +196,9 @@ The system keeps track of:
 * Participant ownership
 
 ⸻
+
 💳 Payment System
+
 EventLink CM is designed to support mobile-money payments commonly used in Cameroon.
 
 Supported providers:
@@ -194,15 +221,19 @@ Development Mode
 During development, the project can use:
 
 PAYMENT_MODE=mock
+
 This allows developers to test successful, failed and pending payment scenarios without using real money.
 
 Production
+
 Real payment processing must use the official provider APIs, credentials and callback/webhook verification mechanisms.
 
 Payment credentials must never be stored directly in source code.
 
 ⸻
+
 📱 QR Code System
+
 Every valid ticket receives a unique QR code.
 
 The QR code represents a secure ticket token.
@@ -228,7 +259,9 @@ Ticket accepted/rejected
 The QR code should not contain unnecessary sensitive participant information.
 
 ⸻
+
 🔐 Ticket Verification
+
 When an organizer scans a ticket, the system checks:
 
 1. Does the QR token exist?
@@ -254,6 +287,7 @@ INVALID TICKET
 ⸻
 
 👥 Attendance System
+
 Once a valid ticket is scanned, EventLink CM records:
 
 * Participant
@@ -265,6 +299,7 @@ Once a valid ticket is scanned, EventLink CM records:
 * Attendance status
 
 Example:
+
 Participant: John Doe
 Ticket: ELCM-A1B2C3
 Event: Tech Conference 2026
@@ -276,6 +311,7 @@ A ticket cannot be successfully checked in more than once.
 ⸻
 
 📊 Statistics and Reports
+
 Organizers can monitor event performance.
 
 The dashboard can display:
@@ -290,6 +326,7 @@ The dashboard can display:
 * Revenue
 
 Attendance Rate
+
 Attendance Rate =
 (Attended Participants / Registered Participants) × 100
 
@@ -298,9 +335,11 @@ These statistics can help organizers understand event performance and improve fu
 ⸻
 
 📑 Reports
+
 The system supports event reports such as:
 
 Attendance Report
+
 Participant
 Email
 Ticket Number
@@ -309,12 +348,14 @@ Attendance Status
 Scan Time
 
 Ticket Report
+
 Ticket Type
 Quantity
 Tickets Sold
 Tickets Remaining
 
 Event Performance
+
 Registrations
 Attendance
 No-Shows
@@ -354,9 +395,11 @@ translations/
 ⸻
 
 👤 User Roles
+
 EventLink CM has three main roles.
 
 Participant
+
 Can:
 
 * Browse events
@@ -367,6 +410,7 @@ Can:
 * View attendance history
 
 Organizer
+
 Can:
 
 * Create events
@@ -378,6 +422,7 @@ Can:
 * Generate reports
 
 Administrator
+
 Can:
 
 * Manage users
@@ -388,7 +433,9 @@ Can:
 * Moderate platform content
 
 ⸻
+
 🔄 System Workflow
+
 Participant Workflow
 
 Visit EventLink CM
@@ -418,7 +465,9 @@ QR Scanned
 Attendance Recorded
 
 ⸻
+
 Organizer Workflow
+
 Create Organizer Account
           ↓
 Login
@@ -446,15 +495,18 @@ View Statistics
 Generate Report
 
 ⸻
+
 🛠️ Technology Stack
 
 Frontend
+
 * HTML5
 * CSS3
 * JavaScript
 * Bootstrap
 
 Backend
+
 * Python
 * Flask
 * Flask-SQLAlchemy
@@ -462,22 +514,28 @@ Backend
 * Flask-Bcrypt
 
 Database
+
 * MySQL
 * PyMySQL
 
 QR Code
+
 * Python qrcode
 * Browser-based QR scanner
 
 Testing
+
 * Pytest
 
 Version Control
+
 * Git
 * GitHub
 
 ⸻
+
 📁 Project Structure
+
 eventlink_cm/
 │
 ├── app/
@@ -521,8 +579,11 @@ eventlink_cm/
 └── README.md
 
 ⸻
+
 🗄️ Database
+
 The application uses MySQL.
+
 Main entities include:
 
 User
@@ -544,6 +605,7 @@ User
  └── Audit Logs
 
 Main tables:
+
 * users
 * organizers
 * events
@@ -556,6 +618,7 @@ Main tables:
 * audit_logs
 
 ⸻
+
 🔒 Security
 
 Security is an important part of EventLink CM.
@@ -584,6 +647,7 @@ Never place payment API secrets inside frontend JavaScript.
 Never trust payment success messages sent only from the browser.
 
 ⸻
+
 💻 Installation
 
 1. Clone the project
@@ -595,6 +659,7 @@ Then:
 cd eventlink_cm
 
 ⸻
+
 2. Create a virtual environment
 
 Windows
@@ -608,11 +673,13 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 ⸻
+
 3. Install dependencies
 
 pip install -r requirements.txt
 
 ⸻
+
 4. Create MySQL Database
 
 Open MySQL:
@@ -622,7 +689,9 @@ CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 ⸻
+
 5. Configure Environment Variables
+
 Copy:
 
 .env.example
@@ -640,7 +709,9 @@ PAYMENT_MODE=mock
 Replace the database username and password with your own MySQL credentials.
 
 ⸻
+
 ▶️ Running the Application
+
 Start Flask:
 
 python run.py
@@ -654,11 +725,13 @@ Open the address in your browser.
 ⸻
 
 🧪 Testing
+
 Run all tests:
 
 pytest
 
 The project follows the principles of Test-Driven Development (TDD).
+
 The development cycle is:
 
 RED
@@ -674,7 +747,9 @@ REFACTOR
 Improve implementation
 
 ⸻
+
 🌿 Git Branching Strategy
+
 The project uses Git branches to keep development organized.
 
 main
@@ -695,15 +770,19 @@ main
        └── feature/testing
 
 Main
+
 Contains stable production-ready code.
 
 Develop
+
 Contains integrated development work.
 
 Feature Branches
+
 Each feature is developed independently.
 
 Example:
+
 git checkout develop
 git checkout -b feature/events
 
@@ -716,7 +795,9 @@ git push origin feature/events
 Then create a Pull Request into develop.
 
 ⸻
+
 🏃 Development Methodology
+
 EventLink CM follows:
 
 SDLC
@@ -736,34 +817,45 @@ Deployment
 Maintenance
 
 Scrum
+
 Development can be divided into sprints:
 
 Sprint 1
+
 Project foundation
 
 Sprint 2
+
 Authentication
 
 Sprint 3
+
 Event management
 
 Sprint 4
+
 Ticketing
 
 Sprint 5
+
 Payments
 
 Sprint 6
+
 QR scanning and attendance
 
 Sprint 7
+
 Statistics and reports
 
 Sprint 8
+
 Administration, security and final testing
 
 ⸻
+
 🧩 Object-Oriented Design
+
 The backend uses service-oriented classes where appropriate.
 
 For example:
@@ -779,7 +871,9 @@ PaymentService
 This allows different payment providers to implement the same payment operations while keeping the rest of the application independent from a specific provider.
 
 ⸻
+
 📱 Responsive Design
+
 EventLink CM is designed for:
 
 * Smartphones
@@ -790,7 +884,9 @@ EventLink CM is designed for:
 The interface should prioritize a mobile-friendly experience because participants and organizers may primarily access the platform from mobile devices.
 
 ⸻
+
 🔮 Future Improvements
+
 Possible future versions can include:
 
 * Real-time notifications
@@ -814,7 +910,9 @@ Possible future versions can include:
 * Real-time event dashboards
 
 ⸻
+
 ⚠️ Production Considerations
+
 Before deploying EventLink CM to production:
 
 * Change all development secrets.
@@ -833,9 +931,11 @@ Before deploying EventLink CM to production:
 * Never use mock payments in production.
 
 ⸻
+
 👨‍💻 Contributors
 
 Project: EventLink CM
+
 Purpose: Event management and participant connection platform
 
 Primary Technologies:
@@ -848,6 +948,7 @@ Flask
 MySQL
 
 ⸻
+
 📄 License
 
 This project can be released under an appropriate open-source or academic project license.
@@ -855,6 +956,7 @@ This project can be released under an appropriate open-source or academic projec
 For an academic submission, the project ownership and licensing terms should follow the requirements of the institution or project supervisor.
 
 ⸻
+
 ⭐ EventLink CM
 
 Connect Events. Empower Organizers. Simplify Participation.
