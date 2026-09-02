@@ -1,0 +1,30 @@
+{% extends 'events/base.html' %}
+{% block title %}Ticket &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white border border-slate-200 rounded-xl p-6 text-center">
+  <p class="text-xs uppercase tracking-wide text-slate-400">Digital ticket</p>
+  <h1 class="text-2xl font-bold mt-1">{{ ticket.booking.event.title }}</h1>
+  <p class="text-slate-500 text-sm">{{ ticket.booking.event.starts_at|date:"l d M Y, H:i" }}</p>
+  <p class="text-slate-500 text-sm">{{ ticket.booking.event.venue }}, {{ ticket.booking.event.city }}</p>
+
+  <img src="{% url 'ticket_qr' ticket.code %}" alt="QR code for ticket {{ ticket.code }}" class="mx-auto mt-6 w-56 h-56">
+  <p class="text-[11px] text-slate-400 break-all mt-2">{{ ticket.code }}</p>
+
+  <dl class="mt-6 text-left text-sm space-y-1">
+    <div class="flex justify-between"><dt class="text-slate-500">Holder</dt><dd class="font-medium">{{ ticket.holder_name }}</dd></div>
+    <div class="flex justify-between"><dt class="text-slate-500">Category</dt><dd class="font-medium">{{ ticket.booking.category.name }}</dd></div>
+    <div class="flex justify-between"><dt class="text-slate-500">Price</dt><dd class="font-medium">{% if ticket.booking.category.is_free %}Free{% else %}{{ ticket.booking.category.price|floatformat:0 }} XAF{% endif %}</dd></div>
+  </dl>
+
+  {% if ticket.is_checked_in %}
+    <p class="mt-6 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3">
+      This ticket was already used on {{ ticket.checked_in_at|date:"d M Y, H:i" }}.
+    </p>
+  {% else %}
+    <p class="mt-6 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3">
+      Valid ticket. The QR code works only once &mdash; do not share it.
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

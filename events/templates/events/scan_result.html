@@ -1,0 +1,28 @@
+{% extends 'events/base.html' %}
+{% block title %}Ticket check-in &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white border border-slate-200 rounded-xl p-6 text-center">
+  <h1 class="text-xl font-bold">{{ event.title }}</h1>
+  <p class="text-slate-500 text-sm">{{ ticket.holder_name }} &mdash; {{ ticket.booking.category.name }}</p>
+
+  {% if result %}
+    <div class="mt-6 rounded-lg px-4 py-4 text-sm {% if result.status == 'valid' %}bg-emerald-50 border border-emerald-200 text-emerald-700{% else %}bg-red-50 border border-red-200 text-red-700{% endif %}">
+      {{ result.message }}
+    </div>
+  {% else %}
+    {% if ticket.is_checked_in %}
+      <div class="mt-6 rounded-lg bg-red-50 border border-red-200 text-red-700 px-4 py-4 text-sm">
+        This ticket was already used on {{ ticket.checked_in_at|date:"d M Y, H:i" }}.
+      </div>
+    {% else %}
+      <form method="post" class="mt-6">
+        {% csrf_token %}
+        <button class="w-full rounded-lg bg-emerald-600 text-white px-4 py-3 hover:bg-emerald-700">Confirm check-in</button>
+      </form>
+    {% endif %}
+  {% endif %}
+
+  <a href="{% url 'scanner' event.slug %}" class="mt-6 inline-block text-sm text-emerald-600 hover:underline">Back to scanner</a>
+</div>
+{% endblock %}

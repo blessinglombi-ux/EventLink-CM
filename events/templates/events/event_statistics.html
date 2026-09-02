@@ -1,0 +1,79 @@
+{% extends 'events/base.html' %}
+{% block title %}{{ event.title }} statistics &middot; EventLink CM{% endblock %}
+
+{% block content %}
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <div>
+    <h1 class="text-2xl font-bold">{{ event.title }}</h1>
+    <p class="text-slate-500 text-sm">{{ event.starts_at|date:"d M Y, H:i" }} &mdash; {{ event.venue }}, {{ event.city }}</p>
+  </div>
+  <div class="space-x-3">
+    <a href="{% url 'scanner' event.slug %}" class="rounded-lg bg-emerald-600 text-white px-4 py-2">Open scanner</a>
+    <a href="{% url 'event_attendees' event.slug %}" class="rounded-lg border border-slate-300 px-4 py-2">Attendees</a>
+  </div>
+</div>
+
+<section class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Capacity</p><p class="text-2xl font-bold">{{ event.capacity }}</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Tickets issued</p><p class="text-2xl font-bold">{{ event.tickets_issued }}</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Checked in</p><p class="text-2xl font-bold">{{ event.tickets_checked_in }}</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Attendance rate</p><p class="text-2xl font-bold">{{ event.attendance_rate }}%</p></div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs text-slate-500">Revenue</p><p class="text-2xl font-bold">{{ event.revenue|floatformat:0 }} XAF</p></div>
+</section>
+
+<section class="mt-8 bg-white border border-slate-200 rounded-xl overflow-x-auto">
+  <h2 class="px-4 pt-4 font-semibold">Per category</h2>
+  <table class="w-full text-sm mt-3">
+    <thead class="bg-slate-50 text-left text-slate-500">
+      <tr><th class="px-4 py-3">Category</th><th class="px-4 py-3">Price</th><th class="px-4 py-3">Issued</th><th class="px-4 py-3">Remaining</th><th class="px-4 py-3">Attended</th><th class="px-4 py-3">Attendance</th><th class="px-4 py-3">Revenue</th></tr>
+    </thead>
+    <tbody>
+      {% for row in category_stats %}
+        <tr class="border-t border-slate-100">
+          <td class="px-4 py-3 font-medium">{{ row.category.name }}</td>
+          <td class="px-4 py-3">{% if row.category.is_free %}Free{% else %}{{ row.category.price|floatformat:0 }} XAF{% endif %}</td>
+          <td class="px-4 py-3">{{ row.issued }}</td>
+          <td class="px-4 py-3">{{ row.remaining }}</td>
+          <td class="px-4 py-3">{{ row.attended }}</td>
+          <td class="px-4 py-3">
+            <div class="w-32 bg-slate-100 rounded-full h-2">
+              <div class="bg-emerald-500 h-2 rounded-full" style="width: {{ row.attendance_rate }}%"></div>
+            </div>
+            <span class="text-xs text-slate-500">{{ row.attendance_rate }}%</span>
+          </td>
+          <td class="px-4 py-3">{{ row.revenue|floatformat:0 }} XAF</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="mt-8 grid gap-6 lg:grid-cols-2">
+  <div class="bg-white border border-slate-200 rounded-xl p-5">
+    <h2 class="font-semibold">Mobile money breakdown</h2>
+    <ul class="mt-3 space-y-2 text-sm">
+      {% for row in payment_breakdown %}
+        <li class="flex justify-between border-b border-slate-100 pb-2">
+          <span>{% if row.provider == 'mtn' %}MTN Mobile Money{% else %}Orange Money{% endif %} ({{ row.count }})</span>
+          <span class="font-medium">{{ row.total|floatformat:0 }} XAF</span>
+        </li>
+      {% empty %}
+        <li class="text-slate-500">No mobile money payment recorded yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="bg-white border border-slate-200 rounded-xl p-5">
+    <h2 class="font-semibold">Latest check-ins</h2>
+    <ul class="mt-3 space-y-2 text-sm">
+      {% for ticket in recent_check_ins %}
+        <li class="flex justify-between border-b border-slate-100 pb-2">
+          <span>{{ ticket.holder_name }}</span>
+          <span class="text-slate-500">{{ ticket.checked_in_at|date:"d M H:i" }}</span>
+        </li>
+      {% empty %}
+        <li class="text-slate-500">Nobody has been scanned in yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock %}

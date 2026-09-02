@@ -1,0 +1,34 @@
+{% extends 'events/base.html' %}
+{% block title %}Attendees &middot; {{ event.title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold">Attendees &mdash; {{ event.title }}</h1>
+<p class="text-slate-500 text-sm">{{ event.tickets_checked_in }} of {{ event.tickets_issued }} ticket(s) checked in.</p>
+
+<section class="mt-6 bg-white border border-slate-200 rounded-xl overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 text-left text-slate-500">
+      <tr><th class="px-4 py-3">Holder</th><th class="px-4 py-3">Category</th><th class="px-4 py-3">Contact</th><th class="px-4 py-3">Status</th><th class="px-4 py-3">Checked in at</th></tr>
+    </thead>
+    <tbody>
+      {% for ticket in tickets %}
+        <tr class="border-t border-slate-100">
+          <td class="px-4 py-3 font-medium">{{ ticket.holder_name }}</td>
+          <td class="px-4 py-3">{{ ticket.booking.category.name }}</td>
+          <td class="px-4 py-3 text-slate-500">{{ ticket.booking.phone }}</td>
+          <td class="px-4 py-3">
+            {% if ticket.is_checked_in %}
+              <span class="text-xs font-semibold bg-emerald-100 text-emerald-700 px-2 py-1 rounded">Present</span>
+            {% else %}
+              <span class="text-xs font-semibold bg-slate-100 text-slate-500 px-2 py-1 rounded">Not yet</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-slate-500">{{ ticket.checked_in_at|date:"d M Y, H:i"|default:"-" }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">No ticket issued yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

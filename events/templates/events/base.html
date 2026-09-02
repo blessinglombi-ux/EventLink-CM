@@ -1,0 +1,45 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}EventLink CM{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<header class="bg-white border-b border-slate-200">
+  <nav class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center gap-4">
+    <a href="{% url 'event_list' %}" class="text-xl font-bold text-emerald-600">EventLink&nbsp;CM</a>
+    <div class="flex-1"></div>
+    <a href="{% url 'event_list' %}" class="text-sm hover:text-emerald-600">Events</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'organizer_dashboard' %}" class="text-sm hover:text-emerald-600">Dashboard</a>
+      <a href="{% url 'event_create' %}" class="text-sm hover:text-emerald-600">Create event</a>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="text-sm text-slate-500 hover:text-red-600">Log out</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}" class="text-sm hover:text-emerald-600">Organizer login</a>
+      <a href="{% url 'signup' %}" class="text-sm rounded-lg bg-emerald-600 text-white px-3 py-1.5 hover:bg-emerald-700">Sign up</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
+  {% if messages %}
+    <div class="space-y-2 mb-6">
+      {% for message in messages %}
+        <div class="rounded-lg border px-4 py-3 text-sm bg-white border-slate-200">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="bg-white border-t border-slate-200 py-6 text-center text-sm text-slate-500">
+  EventLink CM &mdash; digital tickets with single-use QR codes, paid with MTN MoMo and Orange Money.
+</footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>
